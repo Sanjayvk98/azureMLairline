@@ -1,0 +1,16 @@
+name: churn_pipeline_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip:
+      - azureml-core
+      - mltable
+      - numpy==1.26.4
+      - scipy==1.11.4
+      - imbalanced-learn==0.12.0
+      - xgboost>=1.7.0,<2.0.0
+      - scikit-learn==1.3.2
+      - pandas
+      - mlflow

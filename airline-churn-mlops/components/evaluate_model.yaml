@@ -1,0 +1,23 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: evaluate_model_component
+version: 2
+display_name: Evaluate Model & Quality Gate
+type: command
+
+inputs:
+  model_input:
+    type: mlflow_model
+  test_data:
+    type: uri_folder
+  auc_threshold:
+    type: number
+
+code: ./
+
+environment: azureml:churn_pipeline_env_v2:1
+
+command: >-
+  python evaluate_model.py
+  --model_input ${{inputs.model_input}}
+  --test_data ${{inputs.test_data}}
+  --auc_threshold ${{inputs.auc_threshold}}

@@ -1,0 +1,25 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: prep_data_component
+display_name: Prepare Churn Feature Data
+type: command
+
+inputs:
+  raw_data:
+    type: mltable
+
+outputs:
+  train_data:
+    type: uri_folder
+  test_data:
+    type: uri_folder
+
+code: .
+
+command: >-
+  python prep_data.py 
+  --raw_data ${{inputs.raw_data}} 
+  --train_data ${{outputs.train_data}} 
+  --test_data ${{outputs.test_data}}
+
+environment: azureml:churn_pipeline_env_v2:1
+  

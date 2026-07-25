@@ -1,0 +1,25 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: train_model_component
+version: 2
+display_name: Train XGBoost Churn Model
+type: command
+
+
+inputs:
+  train_data:
+    type: uri_folder
+    description: Input folder containing train.parquet
+
+outputs:
+  model_output:
+    type: mlflow_model
+    description: Trained MLflow XGBoost model artifact
+
+code: ./
+
+environment: azureml:churn_pipeline_env_v2:1
+
+command: >-
+  python train_model.py 
+  --train_data ${{inputs.train_data}} 
+  --model_output ${{outputs.model_output}}

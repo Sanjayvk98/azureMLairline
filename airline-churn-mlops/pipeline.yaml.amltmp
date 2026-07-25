@@ -1,0 +1,34 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: churn_mlops_pipeline
+experiment_name: churn_pipeline_experiment
+description: "End-to-end Churn Prediction Pipeline with Quality Gate"
+
+settings:
+  default_compute: azureml:azuremlopscompute
+
+inputs:
+  raw_dataset:
+    type: mltable
+    path: azureml:churn_train_mltable_dataset:1
+
+jobs:
+  prep_job:
+    type: command
+    component: ./components/prep_data.yaml
+    inputs:
+      raw_data: ${{parent.inputs.raw_dataset}}
+
+  train_job:
+    type: command
+    component: ./components/train_model.yaml
+    inputs:
+      train_data: ${{parent.jobs.prep_job.outputs.train_data}}
+
+  eval_job:
+    type: command
+    component: ./components/evaluate_model.yaml
+    inputs:
+      model_input: ${{parent.jobs.train_job.outputs.model_output}}
+      test_data: ${{parent.jobs.prep_job.outputs.test_data}}
+      auc_threshold: 0.90
